@@ -1,0 +1,1604 @@
+<?xml version="1.0" encoding="utf-16"?>
+<CLAS CLSNAME="ZOA__SUPERCLASS" VERSION="1" LANGU="E" DESCRIPT="Superclass used in all features" UUID="DE33647B5AB4A5F18473080027498DBD" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="BCUSER" CREATEDON="20090322" CHANGEDON="00000000" CHGDANYON="00000000" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="701" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 ">
+ <types CLSNAME="ZOA__SUPERCLASS" CMPNAME="MESSAGE_TYPE" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="1 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDBY="BCUSER" CHANGEDON="20090427" TYPTYPE="4" SRCROW1="10 " SRCCOLUMN1="4 " SRCROW2="15 " SRCCOLUMN2="24 " R3RELEASE="701" TYPESRC_LENG="175 " TYPESRC="begin of message_type,
+
+        text(255) type c,
+
+        id(80) type c,
+
+        severity(1) type c,
+
+        extensions type zoa__field_values,
+
+      end of message_type
+
+"/>
+ <types CLSNAME="ZOA__SUPERCLASS" CMPNAME="MESSAGES_TYPE" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="2 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDBY="BCUSER" CHANGEDON="20090427" TYPTYPE="4" SRCROW1="17 " SRCCOLUMN1="4 " SRCROW2="17 " SRCCOLUMN2="43 " R3RELEASE="701" TYPESRC_LENG="42 " TYPESRC="messages_type type table of message_type
+
+"/>
+ <types CLSNAME="ZOA__SUPERCLASS" CMPNAME="CHANGE_BUFFER_TYPE" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="3 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDBY="BCUSER" CHANGEDON="20090427" TYPTYPE="4" SRCROW1="19 " SRCCOLUMN1="4 " SRCROW2="22 " SRCCOLUMN2="30 " R3RELEASE="701" TYPESRC_LENG="155 " TYPESRC="begin of change_buffer_type,
+
+        temporary_id           type zoa__id,
+
+        permanent_id           type zoa__id,
+
+      end of change_buffer_type
+
+"/>
+ <types CLSNAME="ZOA__SUPERCLASS" CMPNAME="CHANGE_BUFFERS_TYPE" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="4 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" TYPTYPE="4" SRCROW1="24 " SRCCOLUMN1="4 " SRCROW2="24 " SRCCOLUMN2="58 " R3RELEASE="701" TYPESRC_LENG="57 " TYPESRC="change_buffers_type    type table of change_buffer_type
+
+"/>
+ <publicSection>class ZOA__SUPERCLASS definition
+  public
+  create public .
+
+*&quot;* public components of class ZOA__SUPERCLASS
+*&quot;* do not include other source files here!!!
+public section.
+
+  types:
+    begin of message_type,
+        text(255) type c,
+        id(80) type c,
+        severity(1) type c,
+        extensions type zoa__field_values,
+      end of message_type .
+  types:
+    messages_type type table of message_type .
+  types:
+    begin of change_buffer_type,
+        temporary_id           type zoa__id,
+        permanent_id           type zoa__id,
+      end of change_buffer_type .
+  types:
+    change_buffers_type    type table of change_buffer_type .
+
+  constants MESSAGE_WARNING type CHAR1 value 1. &quot;#EC NOTEXT
+  constants MESSAGE_INFO type CHAR1 value 0. &quot;#EC NOTEXT
+  constants MESSAGE_CRITICAL type CHAR1 value 2. &quot;#EC NOTEXT
+  constants CHILD_RELATIONSHIP type STRING value &apos;Child&apos;. &quot;#EC NOTEXT
+  data RELATED_FEATURES type ZOA__RELATED_FEATURES .
+  data ERROR_FLAG type CHAR1 read-only .
+  data MESSAGES type ZOA__MESSAGES read-only .
+  data RESULTS type ZOA__RESULT_CELLS read-only .
+  data FILTERS type STRING read-only .
+  data FIELDS type ZOA__FIELDS read-only .
+  data EXTENSIONS type ZOA__FIELD_VALUES read-only .
+
+  methods ADD_EXTENSION_FIELD
+    importing
+      value(FIELD_NAME) type STRING
+      value(VALUE) type STRING .
+  methods ADD_FILTER
+    importing
+      value(FIELD_NAME) type STRING
+      value(EXACT_MATCH) type STRING optional
+      value(BEGINS_WITH) type STRING optional
+      value(CONTAINS) type STRING optional
+      value(GREATER_THAN) type STRING optional
+      value(LESS_THAN) type STRING optional
+      value(GREATER_THAN_OR_EQUAL) type STRING optional
+      value(LESS_THAN_OR_EQUAL) type STRING optional
+      value(EXCLUDE) type STRING optional
+      value(INTERPRET) type STRING optional
+    raising
+      ZCX_ZOA_DEV .
+  methods CONSTRUCTOR .
+  methods FILL_MESSAGES
+    exporting
+      !MESSAGE_TABLE type ANY .
+  methods FILL_RESULTS
+    exporting
+      !RESULTS_TABLE type TABLE .
+  methods FILL_RESULT_EXTENSIONS
+    exporting
+      !RESULT_EXTENSIONS type ZOA__INDEXED_FIELD_VALUES .
+  methods GET_DESCRIPTION
+    exporting
+      !ID type ZOA__ID
+      !NAME type STRING
+      !LONG_NAME type STRING
+      !DESCRIPTION type STRING
+      !APPLICATION_AREA type STRING
+      !VERSION type STRING .
+  methods IS_FIELD_VALUE_VALID
+    importing
+      !FIELD_NAME type STRING
+      !VALUE type STRING
+    exporting
+      !ERROR_FLAG type CHAR1 .
+  methods IS_USER_AUTHORISED
+    importing
+      !ACTIVITY type STRING default &apos;READ&apos;
+      !FIELD_NAME type STRING optional
+      !EXTENSIONS type ZOA__FIELD_VALUES optional
+      preferred parameter activity
+    returning
+      value(IS_AUTHORISED) type FLAG .
+  methods LIST_ALLOWED_FIELD_VALUES
+    importing
+      !FIELD_NAME type STRING
+      !RESTRICTIONS type ZOA__FIELD_VALUES optional
+    exporting
+      !RESULTS type ZOA__INDEXED_FIELD_VALUES .
+  methods LIST_FIELDS .
+  methods LIST_PROPOSED_VALUES .
+  methods LIST_RELATED_FEATURES
+    exporting
+      !RELATED_FEATURES type ZOA__RELATED_FEATURES .
+  methods LOG_MESSAGE
+    importing
+      !T1 type ANY
+      !T2 type ANY optional
+      !T3 type ANY optional
+      !T4 type ANY optional
+      !SEVERITY type C default &apos;2&apos; .
+  methods REFRESH .
+  methods SAP_CHANGE
+    importing
+      !ID type ZOA__ID
+      value(FIELD_VALUES) type ZOA__FIELD_VALUES optional .
+  methods SAP_COMMIT .
+  methods SAP_CREATE
+    importing
+      !FIELD_VALUES type ZOA__FIELD_VALUES
+    exporting
+      !ID type ZOA__ID .
+  methods SAP_LIST_IDS
+    importing
+      !MAX_ROWS type I default 100
+      !SKIP_ROWS type I default 0
+    exporting
+      !ROW_COUNT type I
+      !IDS type ZOA__IDS .
+  methods SAP_READ
+    importing
+      !ID type ZOA__ID .
+  methods SAP_SEARCH
+    importing
+      value(MAX_ROWS) type I default 100
+      value(SKIP_ROWS) type I default 0
+    exporting
+      value(ROW_COUNT) type I .
+  methods SET_EXTENSIONS
+    importing
+      !EXTENSIONS type ZOA__FIELD_VALUES .</publicSection>
+ <protectedSection>*&quot;* protected components of class ZOA__SUPERCLASS
+*&quot;* do not include other source files here!!!
+protected section.
+
+  data EXCEPTIONS type ref to ZCX_ZOA_DEV .
+  data CHANGE_BUFFERS type CHANGE_BUFFERS_TYPE .
+  data CORE_FIELDS type CL_ABAP_STRUCTDESCR=&gt;COMPONENT_TABLE .
+  data RESULT_ROW_NUMBER type I .
+  data RESULT_FIELDS type ZOA__FIELDS .
+  data ID type ZOA__ID .
+
+  methods ADD_FILTER_STRINGS
+    importing
+      value(FIELD_NAME) type STRING optional
+      value(OPTION) type STRING optional
+      value(VALUE) type STRING optional
+      value(VALUEQ) type STRING optional .
+  methods APPEND_CHANGE_BUFFERS
+    importing
+      !PERMANENT_ID type ZOA__ID optional
+    returning
+      value(TEMPORARY_ID) type ZOA__ID .
+  methods BUILD_SET_EXPRESSION
+    importing
+      !SAP_TABLE type STRING
+      !FIELD_VALUES type ZOA__FIELD_VALUES
+    exporting
+      !EXPRESSION type STRING .
+  methods GET_FIELD
+    importing
+      value(FIELD_NAME) type STRING
+    exporting
+      value(SAP_TABLE) type STRING
+      value(SAP_FIELD) type STRING
+      value(SEARCH_FIELD) type STRING
+      value(DESCRIPTION) type STRING .
+  methods INITIALIZE_RESULTS .
+  methods IS_CORE_FIELD
+    importing
+      !FIELD type STRING
+    returning
+      value(IS_CORE) type FLAG .
+  methods LOG_EXCEPTIONS .
+  class-methods MAKE_WILDCARD
+    changing
+      !VALUE type STRING .
+  methods MAP_TO_EXTENSIONS
+    importing
+      !STRUCTURE type STRING
+      !DATA type ANY
+    raising
+      ZCX_ZOA_DEV .
+  methods MAP_TO_RESULTS
+    importing
+      !STRUCTURE type STRING
+      !DATA type ANY .
+  methods REGISTER_FIELD
+    importing
+      !FIELD_NAME type STRING
+      !SAP_TABLE type STRING optional
+      !SAP_FIELD type STRING optional
+      !SEARCH_FIELD type STRING optional
+      !DESCRIPTION type STRING optional
+      !IS_FILTER type STRING optional .
+  methods REGISTER_RELATED_FEATURE
+    importing
+      !NAME type STRING
+      !RELATIONSHIP type STRING .</protectedSection>
+ <privateSection>*&quot;* private components of class ZOA__SUPERCLASS
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+ <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+ <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <typeUsage CLSNAME="ZOA__SUPERCLASS" TYPEGROUP="ABAP" VERSION="1" TPUTYPE="0" IMPLICIT="X"/>
+ <forwardDeclaration>ABAP</forwardDeclaration>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="CHANGE_BUFFERS" VERSION="1" LANGU="E" DESCRIPT="Uncommitted change and create" EXPOSURE="1" STATE="1" EDITORDER="2 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="CHANGE_BUFFERS_TYPE" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="CHILD_RELATIONSHIP" VERSION="1" LANGU="E" DESCRIPT="Feature has child relationship" EXPOSURE="2" STATE="1" EDITORDER="4 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="2" ATTVALUE="&apos;Child&apos;" ATTEXPVIRT="0" TYPTYPE="1" TYPE="STRING" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="CORE_FIELDS" VERSION="1" LANGU="E" DESCRIPT="Core fields as components" EXPOSURE="1" STATE="1" EDITORDER="3 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="CL_ABAP_STRUCTDESCR=&gt;COMPONENT_TABLE" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="ERROR_FLAG" VERSION="1" LANGU="E" DESCRIPT="Error indicator" EXPOSURE="2" STATE="1" EDITORDER="6 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="CHAR1" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="EXCEPTIONS" VERSION="1" LANGU="E" DESCRIPT="Reference to ZOA exception class" EXPOSURE="1" STATE="1" EDITORDER="1 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="3" TYPE="ZCX_ZOA_DEV" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="EXTENSIONS" VERSION="1" LANGU="E" DESCRIPT="User specified non core fields" EXPOSURE="2" STATE="1" EDITORDER="11 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ZOA__FIELD_VALUES" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="FIELDS" VERSION="1" LANGU="E" DESCRIPT="Feature fields" EXPOSURE="2" STATE="1" EDITORDER="10 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ZOA__FIELDS" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="FILTERS" VERSION="1" LANGU="E" DESCRIPT="Selection clause" EXPOSURE="2" STATE="1" EDITORDER="9 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="STRING" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="ID" VERSION="1" LANGU="E" DESCRIPT="Id for selected feature" EXPOSURE="1" STATE="1" EDITORDER="6 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ZOA__ID" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="MESSAGES" VERSION="1" LANGU="E" DESCRIPT="Messages" EXPOSURE="2" STATE="1" EDITORDER="7 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ZOA__MESSAGES" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="MESSAGE_CRITICAL" VERSION="1" LANGU="E" DESCRIPT="Critical error message (type A E)" EXPOSURE="2" STATE="1" EDITORDER="3 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="2" ATTVALUE="2" ATTEXPVIRT="0" TYPTYPE="1" TYPE="CHAR1" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="MESSAGE_INFO" VERSION="1" LANGU="E" DESCRIPT="Information message" EXPOSURE="2" STATE="1" EDITORDER="2 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="2" ATTVALUE="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="CHAR1" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="MESSAGE_WARNING" VERSION="1" LANGU="E" DESCRIPT="Warning message" EXPOSURE="2" STATE="1" EDITORDER="1 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="2" ATTVALUE="1" ATTEXPVIRT="0" TYPTYPE="1" TYPE="CHAR1" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="RELATED_FEATURES" VERSION="1" LANGU="E" DESCRIPT="Related features and first id" EXPOSURE="2" STATE="1" EDITORDER="5 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ZOA__RELATED_FEATURES" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="RESULTS" VERSION="1" LANGU="E" DESCRIPT="Search results" EXPOSURE="2" STATE="1" EDITORDER="8 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTRDONLY="X" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ZOA__RESULT_CELLS" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="RESULT_FIELDS" VERSION="1" LANGU="E" DESCRIPT="Fields selected for results" EXPOSURE="1" STATE="1" EDITORDER="5 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="ZOA__FIELDS" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <attribute CLSNAME="ZOA__SUPERCLASS" CMPNAME="RESULT_ROW_NUMBER" VERSION="1" LANGU="E" DESCRIPT="Current result row" EXPOSURE="1" STATE="1" EDITORDER="4 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="I" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_EXTENSION_FIELD" VERSION="1" LANGU="E" DESCRIPT="Add an extension field / value" EXPOSURE="2" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_EXTENSION_FIELD" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" DESCRIPT="Field name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_EXTENSION_FIELD" SCONAME="VALUE" VERSION="1" LANGU="E" DESCRIPT="Value" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <source>method ADD_EXTENSION_FIELD.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    ls_extension             type zoa__field_value.
+
+  ls_extension-field_name     = field_name.
+  ls_extension-value         = value.
+  append ls_extension to me-&gt;extensions.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" VERSION="1" LANGU="E" DESCRIPT="Specify selection criteria" EXPOSURE="2" STATE="1" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" MTDNEWEXC="X" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" DESCRIPT="Field name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="EXACT_MATCH" VERSION="1" LANGU="E" DESCRIPT="Exact match" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="BEGINS_WITH" VERSION="1" LANGU="E" DESCRIPT="Begins with" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="CONTAINS" VERSION="1" LANGU="E" DESCRIPT="Contains" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="GREATER_THAN" VERSION="1" LANGU="E" DESCRIPT="Greater than" CMPTYPE="1" MTDTYPE="0" EDITORDER="5 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="LESS_THAN" VERSION="1" LANGU="E" DESCRIPT="Less than" CMPTYPE="1" MTDTYPE="0" EDITORDER="6 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="GREATER_THAN_OR_EQUAL" VERSION="1" LANGU="E" DESCRIPT="Greater than or equal to" CMPTYPE="1" MTDTYPE="0" EDITORDER="7 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="LESS_THAN_OR_EQUAL" VERSION="1" LANGU="E" DESCRIPT="Less than or equal to" CMPTYPE="1" MTDTYPE="0" EDITORDER="8 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="EXCLUDE" VERSION="1" LANGU="E" DESCRIPT="Exclude matching values" CMPTYPE="1" MTDTYPE="0" EDITORDER="9 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="INTERPRET" VERSION="1" LANGU="E" DESCRIPT="Interpret the request" CMPTYPE="1" MTDTYPE="0" EDITORDER="10 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <exception CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER" SCONAME="ZCX_ZOA_DEV" VERSION="1" LANGU="E" DESCRIPT="Exceptions for the developer to fix" MTDTYPE="0" EDITORDER="1 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000"/>
+  <source>method ADD_FILTER.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  DATA:
+    lv_result type repl_result,
+    lv_previous_value type string.
+
+*-- Is this field allowed as a filter?
+  read table fields with key field_name = field_name is_filter = &apos;X&apos; transporting no fields.
+  if sy-subrc &lt;&gt; 0.
+    raise exception type zcx_zoa_dev
+        exporting textid = zcx_zoa_dev=&gt;invalid_filter_field.
+  endif.
+
+  lv_previous_value = me-&gt;filters.
+
+  if me-&gt;filters is not initial.
+    me-&gt;add_filter_strings( option = &apos;AND&apos; ).
+  endif.
+
+  if exclude is not initial.
+    me-&gt;add_filter_strings( option = &apos;NOT&apos; ).
+  endif.
+
+  if interpret is supplied and interpret is not initial.
+    add_filter_strings( field_name = field_name option = &apos;LIKE&apos; valueq = interpret ).
+    exit.
+  endif.
+
+  if exact_match is supplied and exact_match is not initial.
+    add_filter_strings( field_name = field_name option = &apos;EQ&apos; valueq = exact_match ).
+    exit.
+  endif.
+
+  if begins_with is supplied and begins_with is not initial.
+    concatenate begins_with &apos;%&apos; into begins_with.
+    add_filter_strings( field_name = field_name option = &apos;LIKE&apos; valueq = begins_with ).
+    exit.
+  endif.
+
+  if contains is supplied and contains is not initial.
+    concatenate &apos;%&apos; contains &apos;%&apos; into contains.
+    add_filter_strings( field_name = field_name option = &apos;LIKE&apos; valueq = contains ).
+    exit.
+  endif.
+
+  if greater_than is not initial.
+    add_filter_strings( field_name = field_name option = &apos;GT&apos; valueq = greater_than ).
+    me-&gt;add_filter( field_name = field_name less_than = less_than less_than_or_equal = less_than_or_equal exclude = exclude ).
+    exit.
+  elseif greater_than_or_equal is not initial.
+    add_filter_strings( field_name = field_name option = &apos;GE&apos; valueq = greater_than ).
+    me-&gt;add_filter( field_name = field_name less_than = less_than less_than_or_equal = less_than_or_equal exclude = exclude ).
+    exit.
+  endif.
+
+  if less_than is not initial.
+    add_filter_strings( field_name = field_name option = &apos;LT&apos; valueq = less_than ).
+    exit.
+  elseif less_than_or_equal is not initial.
+    add_filter_strings( field_name = field_name option = &apos;LE&apos; valueq = less_than_or_equal ).
+    exit.
+  endif.
+
+*-- Nothing to process, so revert to original filter
+  me-&gt;filters = lv_previous_value.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER_STRINGS" VERSION="1" LANGU="E" DESCRIPT="Add text to the selection string" EXPOSURE="1" STATE="1" EDITORDER="23 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER_STRINGS" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER_STRINGS" SCONAME="OPTION" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER_STRINGS" SCONAME="VALUE" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="ADD_FILTER_STRINGS" SCONAME="VALUEQ" VERSION="1" LANGU="E" DESCRIPT="Value surrounded by quotes" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <source>method ADD_FILTER_STRINGS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    lv_sap_field type string.
+
+  try.
+      get_field(
+        exporting
+          field_name     = field_name
+         importing
+           search_field = lv_sap_field ).
+    catch cx_no_check.
+      exit.
+  endtry.
+
+  concatenate me-&gt;filters lv_sap_field option value into me-&gt;filters separated by space.
+
+  if valueq is supplied.
+    concatenate &apos;&apos;&apos;&apos; valueq &apos;&apos;&apos;&apos; into valueq.
+    concatenate me-&gt;filters valueq into me-&gt;filters separated by space.
+  endif.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="APPEND_CHANGE_BUFFERS" VERSION="1" LANGU="E" DESCRIPT="Record an id pending commit" EXPOSURE="1" STATE="1" EDITORDER="24 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="APPEND_CHANGE_BUFFERS" SCONAME="PERMANENT_ID" VERSION="1" LANGU="E" DESCRIPT="Id for changed items" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__ID" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="APPEND_CHANGE_BUFFERS" SCONAME="TEMPORARY_ID" VERSION="1" LANGU="E" DESCRIPT="New id for created items" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="ZOA__ID"/>
+  <source>method APPEND_CHANGE_BUFFERS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+       &lt;f&gt;                   type change_buffer_type.
+
+  insert initial line into change_buffers
+    assigning &lt;f&gt;.
+
+  if permanent_id is supplied.
+    &lt;f&gt;-permanent_id         = permanent_id.
+  else.
+    call function &apos;GUID_CREATE&apos;
+      importing
+        ev_guid_32           = temporary_id.
+    &lt;f&gt;-temporary_id = &lt;f&gt;-temporary_id.
+  endif.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="BUILD_SET_EXPRESSION" VERSION="1" LANGU="E" DESCRIPT="Create an expression string for update from field values" EXPOSURE="1" STATE="1" EDITORDER="25 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="BUILD_SET_EXPRESSION" SCONAME="SAP_TABLE" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="BUILD_SET_EXPRESSION" SCONAME="FIELD_VALUES" VERSION="1" LANGU="E" DESCRIPT="Field values table" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__FIELD_VALUES"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="BUILD_SET_EXPRESSION" SCONAME="EXPRESSION" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <source>method BUILD_SET_EXPRESSION.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+     &lt;f&gt;                     type zoa__field_value.
+
+  data:
+    lv_value_text            type string,
+    lv_sap_table             type string,
+    lv_sap_field             type string.
+
+  loop at field_values assigning &lt;f&gt;.
+
+    get_field(
+      exporting
+        field_name           = &lt;f&gt;-field_name
+       importing
+         sap_table           = lv_sap_table
+         sap_field           = lv_sap_field ).
+
+    check lv_sap_table = sap_table.
+
+
+    concatenate &apos;&apos;&apos;&apos; &lt;f&gt;-value &apos;&apos;&apos;&apos; into lv_value_text.
+
+    concatenate expression lv_sap_field &apos;=&apos; lv_value_text into expression
+      separated by space.
+
+  endloop.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="CONSTRUCTOR" VERSION="1" LANGU="E" DESCRIPT="Register source field mappings" EXPOSURE="2" STATE="1" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="2" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method CONSTRUCTOR.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+*|---------------------------------------------------------------------|
+*| Lead Developer : Peter Chapman, Sower Australia                     |
+*|---------------------------------------------------------------------|
+*| For a full list of contributors see the respective source code      |
+*| To download the latest code and new feature classes visit:          |
+*|                                                                     |
+*| latest downloads: http://code.google.com/p/zoa                      |
+*| discussion group: http://groups.google.com/group/sapzoa             |
+*| project wiki:     https://wiki.sdn.sap.com/wiki/display/ABAP/ZOA    |
+*\---------------------------------------------------------------------/
+
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="FILL_MESSAGES" VERSION="1" LANGU="E" DESCRIPT="Fill external message structure" EXPOSURE="2" STATE="1" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="FILL_MESSAGES" SCONAME="MESSAGE_TABLE" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+  <source>method FILL_MESSAGES.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="FILL_RESULTS" VERSION="1" LANGU="E" DESCRIPT="Populate results structured table from internal results matr" EXPOSURE="2" STATE="1" EDITORDER="5 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="FILL_RESULTS" SCONAME="RESULTS_TABLE" VERSION="1" LANGU="E" DESCRIPT="Results for RFC interface" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="TABLE"/>
+  <source>method FILL_RESULTS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  types:
+    begin of column_type,
+      field_name type string,
+      column_number type i,
+    end of column_type.
+
+  data:
+    ls_column type column_type,
+    lt_column type sorted table of column_type with unique key column_number,
+    lv_this_row type i.
+
+  field-symbols:
+    &lt;src&gt; type zoa__result_cell,
+    &lt;tgt_row&gt; type any,
+    &lt;tgt_field&gt; type any.
+
+*-- Perform the mapping row by row
+  loop at results assigning &lt;src&gt;.
+
+    if &lt;src&gt;-row_number = 0.
+      ls_column-column_number = &lt;src&gt;-column_number.
+      ls_column-field_name = &lt;src&gt;-value.
+      insert ls_column into table lt_column.
+    else.
+
+      if &lt;src&gt;-row_number &lt;&gt; lv_this_row.
+        insert initial line into table results_table assigning &lt;tgt_row&gt;.
+        lv_this_row = &lt;src&gt;-row_number.
+      endif.
+
+      &quot; map it
+      read table lt_column into ls_column with key column_number = &lt;src&gt;-column_number.
+      assign component ls_column-field_name of structure &lt;tgt_row&gt; to &lt;tgt_field&gt;.
+      &lt;tgt_field&gt; = &lt;src&gt;-value.
+
+    endif.
+
+  endloop.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="FILL_RESULT_EXTENSIONS" VERSION="1" LANGU="E" DESCRIPT="Map results to RFC extension table" EXPOSURE="2" STATE="1" EDITORDER="6 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="FILL_RESULT_EXTENSIONS" SCONAME="RESULT_EXTENSIONS" VERSION="1" LANGU="E" DESCRIPT="Result extensions" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__INDEXED_FIELD_VALUES"/>
+  <source>method FILL_RESULT_EXTENSIONS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" VERSION="1" LANGU="E" DESCRIPT="Get information about this feature" EXPOSURE="2" STATE="1" EDITORDER="7 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" SCONAME="ID" VERSION="1" LANGU="E" DESCRIPT="Feature type" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__ID"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" SCONAME="NAME" VERSION="1" LANGU="E" DESCRIPT="Feature name" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" SCONAME="LONG_NAME" VERSION="1" LANGU="E" DESCRIPT="Feature long name" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" SCONAME="DESCRIPTION" VERSION="1" LANGU="E" DESCRIPT="Feature description" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" SCONAME="APPLICATION_AREA" VERSION="1" LANGU="E" DESCRIPT="Feature application area" CMPTYPE="1" MTDTYPE="0" EDITORDER="5 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" SCONAME="VERSION" VERSION="1" LANGU="E" DESCRIPT="Feature or superclass version" CMPTYPE="1" MTDTYPE="0" EDITORDER="6 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <source>method GET_DESCRIPTION.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+  id                      = &apos;_&apos;.
+  name                    = &apos;_superclass&apos;.
+  long_name               = &apos;ZOA superclass&apos;(100).
+  description             = &apos;The common core functionality for all ZOA feature classes&apos;(101).
+  application_area        = &apos;CA&apos;.
+  version                 = &apos;00.09.04.22&apos;.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_FIELD" VERSION="1" LANGU="E" DESCRIPT="Read field information" EXPOSURE="1" STATE="1" EDITORDER="26 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_FIELD" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" DESCRIPT="Feature field name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_FIELD" SCONAME="SAP_TABLE" VERSION="1" LANGU="E" DESCRIPT="SAP table name" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_FIELD" SCONAME="SAP_FIELD" VERSION="1" LANGU="E" DESCRIPT="SAP field name" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_FIELD" SCONAME="SEARCH_FIELD" VERSION="1" LANGU="E" DESCRIPT="SAP search field" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_FIELD" SCONAME="DESCRIPTION" VERSION="1" LANGU="E" DESCRIPT="Description" CMPTYPE="1" MTDTYPE="0" EDITORDER="5 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="0" TYPTYPE="1" TYPE="STRING"/>
+  <source>method GET_FIELD.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+    &lt;field&gt; type zoa__field.
+
+  read table fields with key field_name = field_name assigning &lt;field&gt;.
+  check sy-subrc = 0.
+
+  sap_table = &lt;field&gt;-sap_table.
+  sap_field = &lt;field&gt;-sap_field.
+  search_field = &lt;field&gt;-search_field.
+  description = &lt;field&gt;-description.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="INITIALIZE_RESULTS" VERSION="1" LANGU="E" DESCRIPT="Clear search results and initialise for MAP_TO_RESULTS calls" EXPOSURE="1" STATE="1" EDITORDER="27 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method INITIALIZE_RESULTS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+      &lt;field&gt; type zoa__field.
+
+  refresh( ).
+
+  loop at fields assigning &lt;field&gt;.
+    if &lt;field&gt;-is_core is initial.
+      read table extensions with key field_name = &lt;field&gt;-field_name transporting no fields.
+      if sy-subrc &lt;&gt; 0.
+        continue.
+      endif.
+    endif.
+
+    append &lt;field&gt; to result_fields.
+  endloop.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_CORE_FIELD" VERSION="1" LANGU="E" DESCRIPT="Determine if field is core" EXPOSURE="1" STATE="1" EDITORDER="28 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_CORE_FIELD" SCONAME="FIELD" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_CORE_FIELD" SCONAME="IS_CORE" VERSION="1" LANGU="E" DESCRIPT="X if core" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="FLAG"/>
+  <source>method IS_CORE_FIELD.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+     lo_struct_type          type ref to cl_abap_structdescr,
+     lv_feature_name         type string,
+     lv_core_structure_name  type string.
+
+  get_description( importing name = lv_feature_name ).
+
+*-- Determine core fields (first time)
+  if core_fields is initial.
+    concatenate &apos;ZOA_&apos; lv_feature_name &apos;_CORE&apos; into lv_core_structure_name.
+    try.
+        lo_struct_type ?= cl_abap_typedescr=&gt;describe_by_name( lv_core_structure_name ).
+      catch cx_root.
+        message id sy-msgid  type sy-msgty number sy-msgno
+                   with sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    endtry.
+    core_fields              = lo_struct_type-&gt;get_components( ).
+  endif.
+
+*-- Lookup this field for result
+  read table core_fields with key name = field transporting no fields.
+  if sy-subrc = 0.
+    is_core                  = abap_true.
+  endif.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_FIELD_VALUE_VALID" VERSION="1" LANGU="E" DESCRIPT="Vaildate specific value for field" EXPOSURE="2" STATE="1" EDITORDER="8 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_FIELD_VALUE_VALID" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_FIELD_VALUE_VALID" SCONAME="VALUE" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_FIELD_VALUE_VALID" SCONAME="ERROR_FLAG" VERSION="1" LANGU="E" DESCRIPT="Single-Character Flag" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="CHAR1"/>
+  <source>method IS_FIELD_VALUE_VALID.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_USER_AUTHORISED" VERSION="1" LANGU="E" DESCRIPT="Validate user credentials to use a particular class" EXPOSURE="2" STATE="1" EDITORDER="9 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_USER_AUTHORISED" SCONAME="ACTIVITY" VERSION="1" LANGU="E" DESCRIPT="Character Field Length = 10" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING" PARVALUE="&apos;READ&apos;" PAROPTIONL="X" PARPREFERD="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_USER_AUTHORISED" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_USER_AUTHORISED" SCONAME="EXTENSIONS" VERSION="1" LANGU="E" DESCRIPT="Field values table" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__FIELD_VALUES" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_USER_AUTHORISED" SCONAME="IS_AUTHORISED" VERSION="1" LANGU="E" DESCRIPT="Authorisation success" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="3" PARPASSTYP="0" TYPTYPE="1" TYPE="FLAG"/>
+  <source>method IS_USER_AUTHORISED.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_ALLOWED_FIELD_VALUES" VERSION="1" LANGU="E" DESCRIPT="List all allowed values for a field" EXPOSURE="2" STATE="1" EDITORDER="10 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_ALLOWED_FIELD_VALUES" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" DESCRIPT="Field name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_ALLOWED_FIELD_VALUES" SCONAME="RESTRICTIONS" VERSION="1" LANGU="E" DESCRIPT="Field values table" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__FIELD_VALUES" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_ALLOWED_FIELD_VALUES" SCONAME="RESULTS" VERSION="1" LANGU="E" DESCRIPT="Allowed values" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__INDEXED_FIELD_VALUES"/>
+  <source>method LIST_ALLOWED_FIELD_VALUES.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_FIELDS" VERSION="1" LANGU="E" DESCRIPT="List all fields" EXPOSURE="2" STATE="1" EDITORDER="11 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method LIST_FIELDS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_PROPOSED_VALUES" VERSION="1" LANGU="E" DESCRIPT="List proposed default values for all fields" EXPOSURE="2" STATE="1" EDITORDER="12 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method LIST_PROPOSED_VALUES.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_RELATED_FEATURES" VERSION="1" LANGU="E" DESCRIPT="List related features" EXPOSURE="2" STATE="1" EDITORDER="13 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LIST_RELATED_FEATURES" SCONAME="RELATED_FEATURES" VERSION="1" LANGU="E" DESCRIPT="List of related features and information" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__RELATED_FEATURES"/>
+  <source>method LIST_RELATED_FEATURES.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+     &lt;related_feature&gt; type zoa__related_feature.
+
+
+*-- Return all potential related features
+  if id is initial.
+    related_features = me-&gt;related_features.
+
+*-- Return actual features related to selected record
+  else.
+    loop at me-&gt;related_features assigning &lt;related_feature&gt;.
+      check &lt;related_feature&gt;-feature_count &gt; 0.
+      append &lt;related_feature&gt; to related_features.
+    endloop.
+  endif.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="LOG_EXCEPTIONS" VERSION="1" LANGU="E" DESCRIPT="Save exceptions into message buffer" EXPOSURE="1" STATE="1" EDITORDER="29 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method LOG_EXCEPTIONS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    ls_message               type zoa__message,
+    lex_exception            type ref to zcx_zoa_dev.
+
+  lex_exception ?= exceptions.
+
+  clear messages.
+  while lex_exception is not initial.
+    ls_message-text          = lex_exception-&gt;get_text( ).
+    ls_message-id            = lex_exception-&gt;kernel_errid.
+*   ls_message-severity
+    append ls_message to messages.
+
+    lex_exception ?= lex_exception-&gt;previous.
+  endwhile.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="LOG_MESSAGE" VERSION="1" LANGU="E" DESCRIPT="Add a message" EXPOSURE="2" STATE="1" EDITORDER="14 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LOG_MESSAGE" SCONAME="T1" VERSION="1" LANGU="E" DESCRIPT="Text" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LOG_MESSAGE" SCONAME="T2" VERSION="1" LANGU="E" DESCRIPT="Text" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LOG_MESSAGE" SCONAME="T3" VERSION="1" LANGU="E" DESCRIPT="Text" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LOG_MESSAGE" SCONAME="T4" VERSION="1" LANGU="E" DESCRIPT="Text" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="LOG_MESSAGE" SCONAME="SEVERITY" VERSION="1" LANGU="E" DESCRIPT="Single-Character Indicator" CMPTYPE="1" MTDTYPE="0" EDITORDER="5 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="C" PARVALUE="&apos;2&apos;" PAROPTIONL="X"/>
+  <source>method LOG_MESSAGE.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+      &lt;msg&gt; type zoa__message.
+
+  insert initial line into table messages assigning &lt;msg&gt;.
+  concatenate t1 t2 t3 t4 into &lt;msg&gt;-text separated by space.
+  &lt;msg&gt;-severity = severity.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAKE_WILDCARD" VERSION="1" LANGU="E" DESCRIPT="Convert a value into a wildcard expression for select" EXPOSURE="1" STATE="1" EDITORDER="30 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="1" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAKE_WILDCARD" SCONAME="VALUE" VERSION="1" LANGU="E" DESCRIPT="Value to convert into wildcard" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="2" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <source>method MAKE_WILDCARD.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  concatenate value &apos;%&apos; into value.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAP_TO_EXTENSIONS" VERSION="1" LANGU="E" DESCRIPT="Transfer data from an internal SAP structure to results tab" EXPOSURE="1" STATE="1" EDITORDER="31 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" MTDNEWEXC="X" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAP_TO_EXTENSIONS" SCONAME="STRUCTURE" VERSION="1" LANGU="E" DESCRIPT="SAP structure name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAP_TO_EXTENSIONS" SCONAME="DATA" VERSION="1" LANGU="E" DESCRIPT="Data in structure" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+  <exception CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAP_TO_EXTENSIONS" SCONAME="ZCX_ZOA_DEV" VERSION="1" LANGU="E" DESCRIPT="Exceptions for the developer to fix" MTDTYPE="0" EDITORDER="1 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000"/>
+  <source>method MAP_TO_EXTENSIONS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+    &lt;field&gt; type zoa__field,
+    &lt;value&gt; type any,
+    &lt;ext&gt; type zoa__field_value.
+
+  clear extensions.
+
+*-- Add a results row
+  loop at fields assigning &lt;field&gt; where sap_table = structure.
+
+    assign component &lt;field&gt;-sap_field of structure data to &lt;value&gt;.
+    if sy-subrc &lt;&gt; 0.
+      raise exception type zcx_zoa_dev
+        exporting
+          textid = zcx_zoa_dev=&gt;unknown_field.
+    endif.
+
+    check &lt;value&gt; is not initial.
+
+    insert initial line into table extensions assigning &lt;ext&gt;.
+    &lt;ext&gt;-field_name = &lt;field&gt;-field_name.
+    &lt;ext&gt;-value = &lt;value&gt;.
+
+  endloop.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAP_TO_RESULTS" VERSION="1" LANGU="E" DESCRIPT="Transfer data from an internal SAP structure to results tab" EXPOSURE="1" STATE="1" EDITORDER="32 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAP_TO_RESULTS" SCONAME="STRUCTURE" VERSION="1" LANGU="E" DESCRIPT="SAP structure name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="MAP_TO_RESULTS" SCONAME="DATA" VERSION="1" LANGU="E" DESCRIPT="Data in structure" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ANY"/>
+  <source>method MAP_TO_RESULTS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+    &lt;field&gt; type zoa__field,
+    &lt;value&gt; type any,
+    &lt;result&gt; type zoa__result_cell.
+
+*-- Handle selective results
+  if result_fields is initial.
+    result_fields = fields.
+    result_row_number = 1.
+  endif.
+
+*-- Build header line
+  if result_row_number = 0.
+    loop at result_fields assigning &lt;field&gt; where sap_table = structure.
+      insert initial line into table results assigning &lt;result&gt;.
+      &lt;result&gt;-column_number = sy-tabix.
+      &lt;result&gt;-row_number = 0.
+      &lt;result&gt;-value = &lt;field&gt;-field_name.
+    endloop.
+    result_row_number = 1.
+  endif.
+
+*-- Add a results row
+  loop at result_fields assigning &lt;field&gt; where sap_table = structure.
+
+    assign component &lt;field&gt;-sap_field of structure data to &lt;value&gt;.
+    check sy-subrc = 0 and &lt;value&gt; is not initial.
+
+    insert initial line into table results assigning &lt;result&gt;.
+    &lt;result&gt;-column_number = sy-tabix.
+    &lt;result&gt;-row_number = result_row_number.
+    &lt;result&gt;-value = &lt;value&gt;.
+
+  endloop.
+
+  result_row_number = result_row_number + 1.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="REFRESH" VERSION="1" LANGU="E" DESCRIPT="Clear values" EXPOSURE="2" STATE="1" EDITORDER="15 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method REFRESH.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  clear filters.
+  clear id.
+  result_row_number = 0.
+  clear results.
+  clear messages.
+  clear result_fields.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_FIELD" VERSION="1" LANGU="E" DESCRIPT="Register a field to be part of the feature" EXPOSURE="1" STATE="1" EDITORDER="33 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" MTDNEWEXC="X" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_FIELD" SCONAME="FIELD_NAME" VERSION="1" LANGU="E" DESCRIPT="Friendly field name" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_FIELD" SCONAME="SAP_TABLE" VERSION="1" LANGU="E" DESCRIPT="Source SAP table" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_FIELD" SCONAME="SAP_FIELD" VERSION="1" LANGU="E" DESCRIPT="Source SAP field, if different from FIELD" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_FIELD" SCONAME="SEARCH_FIELD" VERSION="1" LANGU="E" DESCRIPT="Matchcode field for uppercase searches" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_FIELD" SCONAME="DESCRIPTION" VERSION="1" LANGU="E" DESCRIPT="Description if different from DDIC" CMPTYPE="1" MTDTYPE="0" EDITORDER="5 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_FIELD" SCONAME="IS_FILTER" VERSION="1" LANGU="E" DESCRIPT="Flag if used to filter search results" CMPTYPE="1" MTDTYPE="0" EDITORDER="6 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING" PAROPTIONL="X"/>
+  <source>method REGISTER_FIELD.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    ls_field type zoa__field,
+    lv_sap_table type dfies-tabname,
+    lv_sap_field type dfies-lfieldname,
+    lv_sap_description type dd04v-scrtext_l.
+
+  ls_field-field_name        = field_name.
+  translate ls_field-field_name to upper case.
+  ls_field-field_name_lowercase    = field_name.
+  ls_field-sap_table          = sap_table.
+  ls_field-is_core            = is_core_field( ls_field-field_name ).
+  ls_field-is_filter          = is_filter.
+  if sap_field is initial.
+    ls_field-sap_field        = field_name.
+  else.
+    ls_field-sap_field        = sap_field.
+  endif.
+
+  if search_field is initial.
+    ls_field-search_field = ls_field-sap_field.
+  else.
+    ls_field-search_field = search_field.
+    ls_field-is_filter    = abap_true.   &quot; force searchable
+  endif.
+
+  if description is supplied and description is not initial.
+    ls_field-description  = description.
+  else.
+    lv_sap_table = sap_table.
+    lv_sap_field = sap_field.
+
+    call function &apos;DDIC_FIELDNAME_GET&apos;
+      exporting
+        iv_strucname         = lv_sap_table
+        iv_fieldname         = lv_sap_field
+      changing
+        cv_field_description = lv_sap_description
+      exceptions
+        no_data              = 1
+        others               = 2.
+
+    if sy-subrc &lt;&gt; 0.
+      log_message(
+        exporting
+          t1 = &apos;There was a problem registering field&apos;
+          t2 = field_name
+          severity = &apos;5&apos; ).
+    endif.
+
+    ls_field-description = lv_sap_description.
+
+  endif.
+
+  append ls_field to fields.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_RELATED_FEATURE" VERSION="1" LANGU="E" DESCRIPT="Register related feature" EXPOSURE="1" STATE="1" EDITORDER="34 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_RELATED_FEATURE" SCONAME="NAME" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="REGISTER_RELATED_FEATURE" SCONAME="RELATIONSHIP" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="STRING"/>
+  <source>method REGISTER_RELATED_FEATURE.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    ls_related_feature type zoa__related_feature.
+
+  ls_related_feature-feature_name = name.
+  ls_related_feature-relationship = relationship.
+  append ls_related_feature to related_features.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CHANGE" VERSION="1" LANGU="E" DESCRIPT="Change" EXPOSURE="2" STATE="1" EDITORDER="16 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CHANGE" SCONAME="ID" VERSION="1" LANGU="E" DESCRIPT="Unique id for object within a feature set" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__ID"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CHANGE" SCONAME="FIELD_VALUES" VERSION="1" LANGU="E" DESCRIPT="Field values table" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="ZOA__FIELD_VALUES" PAROPTIONL="X"/>
+  <source>method SAP_CHANGE.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_COMMIT" VERSION="1" LANGU="E" DESCRIPT="Save changes to database" EXPOSURE="2" STATE="1" EDITORDER="17 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method SAP_COMMIT.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CREATE" VERSION="1" LANGU="E" DESCRIPT="Create" EXPOSURE="2" STATE="1" EDITORDER="18 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CREATE" SCONAME="FIELD_VALUES" VERSION="1" LANGU="E" DESCRIPT="New parameter / field values" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__FIELD_VALUES"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CREATE" SCONAME="ID" VERSION="1" LANGU="E" DESCRIPT="Temporary id until committed to SAP" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__ID"/>
+  <source>method SAP_CREATE.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+* Create this
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_LIST_IDS" VERSION="1" LANGU="E" DESCRIPT="List of ids" EXPOSURE="2" STATE="1" EDITORDER="19 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_LIST_IDS" SCONAME="MAX_ROWS" VERSION="1" LANGU="E" DESCRIPT="Maximum rows" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="I" PARVALUE="100" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_LIST_IDS" SCONAME="SKIP_ROWS" VERSION="1" LANGU="E" DESCRIPT="Offset" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="I" PARVALUE="0" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_LIST_IDS" SCONAME="ROW_COUNT" VERSION="1" LANGU="E" DESCRIPT="Rows returned" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="I"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_LIST_IDS" SCONAME="IDS" VERSION="1" LANGU="E" DESCRIPT="Id list" CMPTYPE="1" MTDTYPE="0" EDITORDER="4 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__IDS"/>
+  <source>method SAP_LIST_IDS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_READ" VERSION="1" LANGU="E" DESCRIPT="Get details from key" EXPOSURE="2" STATE="1" EDITORDER="20 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_READ" SCONAME="ID" VERSION="1" LANGU="E" DESCRIPT="Unique id for object within a feature set" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__ID"/>
+  <source>method SAP_READ.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_SEARCH" VERSION="1" LANGU="E" DESCRIPT="Search" EXPOSURE="2" STATE="1" EDITORDER="21 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_SEARCH" SCONAME="MAX_ROWS" VERSION="1" LANGU="E" DESCRIPT="Number of rows to return" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="I" PARVALUE="100" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_SEARCH" SCONAME="SKIP_ROWS" VERSION="1" LANGU="E" DESCRIPT="Number of rows to skip" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="0" TYPTYPE="1" TYPE="I" PARVALUE="0" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_SEARCH" SCONAME="ROW_COUNT" VERSION="1" LANGU="E" DESCRIPT="Number of rows returned" CMPTYPE="1" MTDTYPE="0" EDITORDER="3 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="0" TYPTYPE="1" TYPE="I"/>
+  <source>method SAP_SEARCH.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SET_EXTENSIONS" VERSION="1" LANGU="E" DESCRIPT="Load extension requests into class" EXPOSURE="2" STATE="1" EDITORDER="22 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA__SUPERCLASS" CMPNAME="SET_EXTENSIONS" SCONAME="EXTENSIONS" VERSION="1" LANGU="E" DESCRIPT="Field values table" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__FIELD_VALUES"/>
+  <source>method SET_EXTENSIONS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  me-&gt;extensions = extensions.
+
+endmethod.</source>
+ </method>
+</CLAS>

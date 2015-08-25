@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="utf-16"?>
+<CLAS CLSNAME="ZOA_TRAVEL_AGENCY" VERSION="1" LANGU="E" DESCRIPT="Travel Agency" UUID="DE3364C8639FE0F18473080027498DBD" CATEGORY="00" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" CHGDANYON="00000000" CLSFINAL="X" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="701" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="ZOA__SUPERCLASS">
+ <publicSection>class ZOA_TRAVEL_AGENCY definition
+  public
+  inheriting from ZOA__SUPERCLASS
+  final
+  create public .
+
+*&quot;* public components of class ZOA_TRAVEL_AGENCY
+*&quot;* do not include other source files here!!!
+public section.
+
+  data VERSION type STRING .
+
+  methods CONSTRUCTOR .
+  methods TEST .
+
+  methods GET_DESCRIPTION
+    redefinition .
+  methods IS_USER_AUTHORISED
+    redefinition .
+  methods SAP_CHANGE
+    redefinition .
+  methods SAP_CREATE
+    redefinition .
+  methods SAP_LIST_IDS
+    redefinition .
+  methods SAP_READ
+    redefinition .
+  methods SAP_SEARCH
+    redefinition .</publicSection>
+ <protectedSection>*&quot;* protected components of class ZOA_TRAVEL_AGENCY
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+ <privateSection>*&quot;* private components of class ZOA_TRAVEL_AGENCY
+*&quot;* do not include other source files here!!!
+private section.
+
+  methods READ_RELATED_FLIGHT_BOOKINGS
+    exporting
+      !COUNT type I
+      !ID type ZOA__ID .</privateSection>
+ <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+ <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <attribute CLSNAME="ZOA_TRAVEL_AGENCY" CMPNAME="VERSION" VERSION="1" LANGU="E" DESCRIPT="Version number" EXPOSURE="2" STATE="1" EDITORDER="1 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" ATTDECLTYP="0" ATTEXPVIRT="0" TYPTYPE="1" TYPE="STRING" SRCROW1="0 " SRCCOLUMN1="0 " SRCROW2="0 " SRCCOLUMN2="0 " R3RELEASE="701" TYPESRC_LENG="0 "/>
+ <inheritance CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" STATE="1" AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000">
+  <redefinition CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" MTDNAME="GET_DESCRIPTION"/>
+  <redefinition CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" MTDNAME="IS_USER_AUTHORISED"/>
+  <redefinition CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" MTDNAME="SAP_CHANGE"/>
+  <redefinition CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" MTDNAME="SAP_CREATE"/>
+  <redefinition CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" MTDNAME="SAP_LIST_IDS"/>
+  <redefinition CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" MTDNAME="SAP_READ"/>
+  <redefinition CLSNAME="ZOA_TRAVEL_AGENCY" REFCLSNAME="ZOA__SUPERCLASS" VERSION="1" MTDNAME="SAP_SEARCH"/>
+ </inheritance>
+ <method CLSNAME="ZOA_TRAVEL_AGENCY" CMPNAME="CONSTRUCTOR" VERSION="1" LANGU="E" DESCRIPT="Constructor" EXPOSURE="2" STATE="1" EDITORDER="0 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="2" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method CONSTRUCTOR.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  call method super-&gt;constructor.
+
+*-- Fields
+  register_field( field_name = &apos;Id&apos;          sap_table = &apos;STRAVELAG&apos; sap_field = &apos;AGENCYNUM&apos; ).
+  register_field( field_name = &apos;Name&apos;        sap_table = &apos;STRAVELAG&apos; sap_field = &apos;NAME&apos;           is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;Street&apos;      sap_table = &apos;STRAVELAG&apos; sap_field = &apos;STREET&apos;         is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;City&apos;        sap_table = &apos;STRAVELAG&apos; sap_field = &apos;CITY&apos;           is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;PostCode&apos;    sap_table = &apos;STRAVELAG&apos; sap_field = &apos;POSTCODE&apos;       is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;State&apos;       sap_table = &apos;STRAVELAG&apos; sap_field = &apos;REGION&apos;         is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;CountryId&apos;   sap_table = &apos;STRAVELAG&apos; sap_field = &apos;COUNTRY&apos;        is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;Telephone&apos;   sap_table = &apos;STRAVELAG&apos; sap_field = &apos;TELEPHONE&apos;      is_filter = &apos;X&apos; ).
+
+  register_field( field_name = &apos;URL&apos;         sap_table = &apos;STRAVELAG&apos; sap_field = &apos;URL&apos;            is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;LanguageId&apos;  sap_table = &apos;STRAVELAG&apos; sap_field = &apos;LANGU&apos;          is_filter = &apos;X&apos; ).
+  register_field( field_name = &apos;CurrencyId&apos;  sap_table = &apos;STRAVELAG&apos; sap_field = &apos;CURRENCY&apos;       is_filter = &apos;X&apos; ).
+
+  register_related_feature( name = &apos;FLIGHT_BOOKING&apos;  relationship = child_relationship ).
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="GET_DESCRIPTION" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method GET_DESCRIPTION.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  name                  = &apos;TRAVEL_AGENCY&apos;.
+  id                    = &apos;STRAVELAG&apos;.
+  long_name             = &apos;Travel agency details&apos;.
+  description           = &apos;Travel agency physical and postal addresses&apos;.
+  application_area      = &apos;BC&apos;.
+  version               = &apos;00.00.00&apos;.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="IS_USER_AUTHORISED" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method IS_USER_AUTHORISED.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  is_authorised = &apos;X&apos;.
+
+  case activity.
+    when &apos;CREATE&apos;.
+      authority-check object &apos;S_FLBOOK&apos;
+               id &apos;ACTVT&apos;  field &apos;01&apos;.
+
+    when &apos;CHANGE&apos;.
+      authority-check object &apos;S_FLBOOK&apos;
+               id &apos;ACTVT&apos;  field &apos;02&apos;.
+    when &apos;READ&apos;.
+      authority-check object &apos;S_FLBOOK&apos;
+               id &apos;ACTVT&apos;  field &apos;03&apos;.
+  endcase.
+
+*-- insert extensions handling here if available
+
+  if sy-subrc &lt;&gt; 0.
+    call method log_message
+     exporting
+       t1 = sy-uname
+       t2 = &apos;is not authorised for&apos;
+       t3 = activity
+       severity = message_critical.
+    is_authorised = &apos; &apos;.
+  endif.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA_TRAVEL_AGENCY" CMPNAME="READ_RELATED_FLIGHT_BOOKINGS" VERSION="1" LANGU="E" DESCRIPT="Read related flight bookings" EXPOSURE="0" STATE="1" EDITORDER="0 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZOA_TRAVEL_AGENCY" CMPNAME="READ_RELATED_FLIGHT_BOOKINGS" SCONAME="COUNT" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="0" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="I"/>
+  <parameter CLSNAME="ZOA_TRAVEL_AGENCY" CMPNAME="READ_RELATED_FLIGHT_BOOKINGS" SCONAME="ID" VERSION="1" LANGU="E" DESCRIPT="Unique id for object within a feature set" CMPTYPE="1" MTDTYPE="0" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="1" PARPASSTYP="1" TYPTYPE="1" TYPE="ZOA__ID"/>
+  <source>method READ_RELATED_FLIGHT_BOOKINGS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    ls_flight_booking        type sbook.
+
+  select                    count( * )
+    into                    count
+    from                    sbook
+    where                   agencynum = me-&gt;id.
+
+  select                    *
+    from                    sbook
+    up to 1 rows
+    into                    ls_flight_booking
+    where                   agencynum = me-&gt;id.
+  endselect.
+
+  id = ls_flight_booking+3(23).  &quot; Convert composite key to single field
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CHANGE" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method SAP_CHANGE.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    set_expression           type string.
+
+  try.
+
+*-- Authorisation
+
+      check is_user_authorised( &apos;CHANGE&apos; ) = &apos;X&apos;.
+
+*-- Update logic starts here - preferrably a BAPI call
+
+      build_set_expression(
+        exporting
+          sap_table          = &apos;STRAVELAG&apos;
+          field_values       = field_values
+        importing
+          expression         = set_expression ).
+
+      update stravelag
+        set (set_expression)
+        where agencynum = id(8).
+
+*-- Update logic ends here
+  append_change_buffers( exporting permanent_id = id ).
+
+*-- Error handling
+
+    catch zcx_zoa_dev into exceptions.
+      log_exceptions( ).
+
+  endtry.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_CREATE" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method SAP_CREATE.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  try.
+
+*-- Authorisation
+
+      check is_user_authorised( &apos;CREATE&apos; ) = &apos;X&apos;.
+
+*-- Validation logic
+
+
+*-- Persistence logic
+
+  id = append_change_buffers( ).
+
+
+*-- Error handling
+
+    catch zcx_zoa_dev into exceptions.
+      log_exceptions( ).
+
+  endtry.
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_LIST_IDS" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method SAP_LIST_IDS.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    lv_last_row              type i.
+
+
+*-- Authorisation
+
+      check is_user_authorised( &apos;READ&apos; ) = &apos;X&apos;.
+
+
+*-- Initialise
+  lv_last_row                = skip_rows + max_rows.
+
+
+*-- Perform the search
+
+  select                    agencynum
+    from                    stravelag                     &quot;&lt;CHANGES&gt;
+    up to                   lv_last_row rows
+    into table              ids
+    where                   (me-&gt;filters).
+
+  if skip_rows &gt; 0.
+    delete ids to skip_rows.
+  endif.
+
+  describe table ids lines row_count.
+
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_READ" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method SAP_READ.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  field-symbols:
+     &lt;related_feature&gt;       type zoa__related_feature.
+
+  data:
+    ls_row                   type stravelag.  &quot;&lt;CHANGE&gt;
+
+
+*-- Authorisation
+
+  check is_user_authorised( &apos;READ&apos; ) = &apos;X&apos;.
+
+*-- Initialise variables
+
+  me-&gt;refresh( ).
+
+  call function &apos;CONVERSION_EXIT_ALPHA_INPUT&apos;
+    exporting
+      input                  = id
+    importing
+      output                 = me-&gt;id(8). &quot;&lt;CHECK&gt;
+
+
+*-- Read main data
+
+  select single             *
+    from                    stravelag         &quot;&lt;CHANGE&gt;
+    into                    ls_row
+    where                   agencynum = me-&gt;id.
+
+  initialize_results( ).
+  map_to_results( exporting structure = &apos;STRAVELAG&apos; data = LS_ROW ).    &quot;&lt;CHANGES&gt;
+
+
+*-- Return related features
+
+  loop at related_features assigning &lt;related_feature&gt;.
+    case &lt;related_feature&gt;-feature_name.
+      when &apos;FLIGHT_BOOKING&apos;.
+        read_related_flight_bookings(
+            importing
+              count          = &lt;related_feature&gt;-feature_count
+              id             = &lt;related_feature&gt;-id ).
+
+    endcase.
+  endloop.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA__SUPERCLASS" CMPNAME="SAP_SEARCH" VERSION="0" EXPOSURE="0" STATE="0" EDITORDER="0 " DISPID="0 " CREATEDON="00000000" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method SAP_SEARCH.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    lv_last_row              type i,
+    lt_rows                  type table of stravelag.    &quot;&lt;CHANGES&gt;
+
+  field-symbols:
+    &lt;row&gt;                    like line of lt_rows.
+
+
+*-- Authorisation
+
+      check is_user_authorised( &apos;READ&apos; ) = &apos;X&apos;.
+
+
+*-- Initialise
+  clear messages.
+  clear results.
+  lv_last_row                = skip_rows + max_rows.
+
+
+*-- Perform the search
+
+  select                    *
+    from                    stravelag                     &quot;&lt;CHANGES&gt;
+    up to                   lv_last_row rows
+    into table              lt_rows
+    where                   (me-&gt;filters).
+
+  if skip_rows &gt; 0.
+    delete lt_rows to skip_rows.
+  endif.
+
+  describe table lt_rows lines row_count.
+
+
+*-- Map the return values
+
+  initialize_results( ).
+  loop at lt_rows assigning &lt;row&gt;.
+    map_to_results( exporting structure = &apos;STRAVELAG&apos; data = &lt;row&gt; ).    &quot;&lt;CHANGES&gt;
+  endloop.
+
+endmethod.</source>
+ </method>
+ <method CLSNAME="ZOA_TRAVEL_AGENCY" CMPNAME="TEST" VERSION="1" LANGU="E" EXPOSURE="2" STATE="1" EDITORDER="0 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="0" MTDDECLTYP="0" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <source>method TEST.
+*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+
+  data:
+    field_value              type zoa__field_value,
+    field_values             type zoa__field_values.
+
+  field_value-field_name          = &apos;NAME&apos;.
+  field_value-value          = &apos;Cap Travels Ltd.&apos;.
+  append field_value to field_values.
+
+  break chapmanp.
+  call method sap_change
+    exporting
+      id                     = &apos;00000254&apos;
+      field_values           = field_values.
+
+
+endmethod.</source>
+ </method>
+</CLAS>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-16"?>
+<CLAS CLSNAME="ZCX_ZOA" VERSION="1" LANGU="E" DESCRIPT="ZOA exception classes" UUID="DE33647B5AB480F18473080027498DBD" CATEGORY="40" EXPOSURE="2" STATE="1" RELEASE="0" AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" CHGDANYON="00000000" CLSCCINCL="X" FIXPT="X" UNICODE="X" R3RELEASE="701" CLSBCCAT="00" DURATION_TYPE="0 " RISK_LEVEL="0 " REFCLSNAME="CX_STATIC_CHECK">
+ <publicSection>class ZCX_ZOA definition
+  public
+  inheriting from CX_STATIC_CHECK
+  create public .
+
+*&quot;* public components of class ZCX_ZOA
+*&quot;* do not include other source files here!!!
+public section.
+
+  methods CONSTRUCTOR
+    importing
+      !TEXTID like TEXTID optional
+      !PREVIOUS like PREVIOUS optional .</publicSection>
+ <protectedSection>*&quot;* protected components of class ZCX_ZOA
+*&quot;* do not include other source files here!!!
+protected section.</protectedSection>
+ <privateSection>*&quot;* private components of class ZCX_ZOA
+*&quot;* do not include other source files here!!!
+private section.</privateSection>
+ <localImplementation>*&quot;* local class implementation for public class
+*&quot;* use this source file for the implementation part of
+*&quot;* local helper classes</localImplementation>
+ <localTypes>*&quot;* use this source file for any type declarations (class
+*&quot;* definitions, interfaces or data types) you need for method
+*&quot;* implementation or private method&apos;s signature</localTypes>
+ <localMacros>*&quot;* use this source file for any macro definitions you need
+*&quot;* in the implementation part of the class</localMacros>
+ <inheritance CLSNAME="ZCX_ZOA" REFCLSNAME="CX_STATIC_CHECK" VERSION="1" STATE="1" AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000"/>
+ <method CLSNAME="ZCX_ZOA" CMPNAME="CONSTRUCTOR" VERSION="1" LANGU="E" DESCRIPT="CONSTRUCTOR" EXPOSURE="2" STATE="1" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" MTDTYPE="2" MTDDECLTYP="0" LOCKED="X" R3RELEASE="701" BCMTDCAT="00" BCMTDSYN="0">
+  <parameter CLSNAME="ZCX_ZOA" CMPNAME="CONSTRUCTOR" SCONAME="TEXTID" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="2" EDITORDER="1 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="0" TYPE="TEXTID" PAROPTIONL="X"/>
+  <parameter CLSNAME="ZCX_ZOA" CMPNAME="CONSTRUCTOR" SCONAME="PREVIOUS" VERSION="1" LANGU="E" CMPTYPE="1" MTDTYPE="2" EDITORDER="2 " DISPID="0 " AUTHOR="BCUSER" CREATEDON="20090427" CHANGEDON="00000000" PARDECLTYP="0" PARPASSTYP="1" TYPTYPE="0" TYPE="PREVIOUS" PAROPTIONL="X"/>
+  <source>method CONSTRUCTOR.
+CALL METHOD SUPER-&gt;CONSTRUCTOR
+EXPORTING
+TEXTID = TEXTID
+PREVIOUS = PREVIOUS
+.
+endmethod.</source>
+ </method>
+</CLAS>

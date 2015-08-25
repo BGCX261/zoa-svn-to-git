@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-16"?>
+<FUGR SPRAS="E" AREA="ZOA_CORE" AREAT="ZOA general  functions">
+ <mainprogram NAME="SAPLZOA_CORE" VARCL="X" DBAPL="S" DBNA="D$" SUBC="F" APPL="S" CNAM="CHAPMANP" CDAT="20090416" UNAM="BCUSER" UDAT="20090427" VERN="000006" RMAND="110" RLOAD="E" FIXPT="X" SDATE="20090427" STIME="212424" IDATE="20090427" ITIME="212424" LDBNAME="D$S" UCCHECK="X">
+  <textPool/>
+  <source>*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+* Version 00.09.04.22
+
+*******************************************************************
+*   System-defined Include-files.                                 *
+*******************************************************************
+  INCLUDE LZOA_CORETOP.                      &quot; Global Data
+  INCLUDE LZOA_COREUXX.                      &quot; Function Modules
+
+*******************************************************************
+*   User-defined Include-files (if necessary).                    *
+*******************************************************************
+* INCLUDE LZOA_COREF...                      &quot; Subprograms
+* INCLUDE LZOA_COREO...                      &quot; PBO-Modules
+* INCLUDE LZOA_COREI...                      &quot; PAI-Modules
+
+INCLUDE LZOA_COREF01.</source>
+ </mainprogram>
+ <includeprograms>
+  <include NAME="LZOA_COREF01" VARCL="X" SUBC="I" APPL="S" CNAM="CHAPMANP" CDAT="20090416" UNAM="BCUSER" UDAT="20090427" VERN="000005" RMAND="110" RLOAD="E" SDATE="20090427" STIME="212424" IDATE="20090427" ITIME="212424" UCCHECK="X">
+   <include_source>*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+*----------------------------------------------------------------------*
+***INCLUDE LZOA_COREF01 .
+*----------------------------------------------------------------------*
+
+
+*&amp;---------------------------------------------------------------------*
+*&amp;      Form  INSTANTIATE_FEATURE
+*&amp;---------------------------------------------------------------------*
+form instantiate_feature  using    p_feature_name.
+
+  data:
+    lv_feature_name          type string.
+
+*-- Instantiate zoa class for specified feature
+  concatenate &apos;ZOA_&apos; p_feature_name into lv_feature_name.
+  try.
+      create object go_feature   type (lv_feature_name).
+    catch cx_root.
+      create object go_feature.
+      go_feature-&gt;log_message( exporting t1 = &apos;Unable to create class for&apos; t2 = lv_feature_name ).
+  endtry.
+
+endform.                    &quot; INSTANTIATE_FEATURE</include_source>
+  </include>
+  <include NAME="LZOA_CORETOP" VARCL="X" DBAPL="S" DBNA="D$" SUBC="I" APPL="S" CNAM="CHAPMANP" CDAT="20090416" UNAM="BCUSER" UDAT="20090427" VERN="000006" RMAND="110" FIXPT="X" SDATE="20090427" STIME="212424" IDATE="20090427" ITIME="212424" LDBNAME="D$S" UCCHECK="X">
+   <include_source>*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+function-pool zoa_core.                     &quot;MESSAGE-ID ..
+
+data:
+  go_feature               type ref to zoa__superclass.</include_source>
+  </include>
+ </includeprograms>
+ <functionmodules/>
+</FUGR>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-16"?>
+<FUGR SPRAS="E" AREA="ZOA_TRAVEL_AGENCY" AREAT="Travel Agency">
+ <mainprogram NAME="SAPLZOA_TRAVEL_AGENCY" VARCL="X" DBAPL="S" DBNA="D$" SUBC="F" APPL="S" CNAM="CHAPMANP" CDAT="20090416" UNAM="BCUSER" UDAT="20090427" VERN="000005" RMAND="110" RLOAD="E" FIXPT="X" SDATE="20090427" STIME="213143" IDATE="20090427" ITIME="213143" LDBNAME="D$S" UCCHECK="X">
+  <textPool/>
+  <source>*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+* Version 00.09.04.22
+
+*******************************************************************
+*   System-defined Include-files.                                 *
+*******************************************************************
+  INCLUDE LZOA_TRAVEL_AGENCYTOP.             &quot; Global Data
+  INCLUDE LZOA_TRAVEL_AGENCYUXX.             &quot; Function Modules
+
+*******************************************************************
+*   User-defined Include-files (if necessary).                    *
+*******************************************************************
+* INCLUDE LZOA_TRAVEL_AGENCYF...             &quot; Subprograms
+* INCLUDE LZOA_TRAVEL_AGENCYO...             &quot; PBO-Modules
+* INCLUDE LZOA_TRAVEL_AGENCYI...             &quot; PAI-Modules</source>
+ </mainprogram>
+ <includeprograms>
+  <include NAME="LZOA_TRAVEL_AGENCYTOP" VARCL="X" DBAPL="S" DBNA="D$" SUBC="I" APPL="S" CNAM="CHAPMANP" CDAT="20090416" UNAM="BCUSER" UDAT="20090427" VERN="000005" RMAND="110" FIXPT="X" SDATE="20090427" STIME="213143" IDATE="20090427" ITIME="213143" LDBNAME="D$S" UCCHECK="X">
+   <include_source>*/---------------------------------------------------------------------\
+*|   This file is part of the ZOA Integration Framework.                                     |
+*|                                                                     |
+*|   ZOA is free software; you can redistribute it and/or modify       |
+*|   it under the terms of the GNU General Public License as published |
+*|   by the Free Software Foundation; either version 2 of the License, |
+*|   or (at your option) any later version.                            |
+*|                                                                     |
+*|   ZOA is distributed in the hope that it will be useful,            |
+*|   but WITHOUT ANY WARRANTY; without even the implied warranty of    |
+*|   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     |
+*|   GNU General Public License for more details.                      |
+*|                                                                     |
+*|   You should have received a copy of the GNU General Public License |
+*|   along with SAPlink; if not, write to the                          |
+*|   Free Software Foundation, Inc.,                                   |
+*|   51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA          |
+*\---------------------------------------------------------------------/
+
+
+function-pool zoa_travel_agency.            &quot;MESSAGE-ID ..</include_source>
+  </include>
+ </includeprograms>
+ <functionmodules/>
+</FUGR>
